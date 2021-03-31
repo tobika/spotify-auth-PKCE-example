@@ -6,7 +6,6 @@
     "start": "http-server public/"
   },
   "author": "Tobias Kausch",
-  "license": "ISC",
   "dependencies": {
     "http-server": "^0.12.3"
   }
