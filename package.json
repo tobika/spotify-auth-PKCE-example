@@ -1,0 +1,13 @@
+{
+  "name": "spotify-web-auth-pkce-example",
+  "version": "0.0.1",
+  "description": "Example Project to use the PKCE authorization flow with Spotify",
+  "scripts": {
+    "start": "http-server public/"
+  },
+  "author": "Tobias Kausch",
+  "license": "ISC",
+  "dependencies": {
+    "http-server": "^0.12.3"
+  }
+}

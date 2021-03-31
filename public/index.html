@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>
+    Example of the Authorization Code Flow with Proof Key for Code Exchange
+    (PKCE) with Spotify
+  </title>
+  <style type="text/css">
+      #login,
+      #loggedin {
+          display: none;
+      }
+
+      td {
+          border: grey solid 1px;
+          overflow-wrap: anywhere;
+      }
+
+      td:first-child {
+          min-width: 150px;
+      }
+  </style>
+</head>
+
+<body>
+<div>
+  <div id="login">
+    <h1>
+      This is an example of the Authorization Code Flow with Proof Key for
+      Code Exchange (PKCE)
+    </h1>
+    <button id="login-button">
+      Log in with Spotify
+    </button>
+  </div>
+  <div id="loggedin">
+    <div id="main"></div>
+    <div id="oauth"></div>
+    <button id="refresh-button">
+      Refresh access token
+    </button>
+    <button id="logout-button">
+      Logout
+    </button>
+  </div>
+</div>
+
+<script src="main.js"></script>
+</body>
+</html>
