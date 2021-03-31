@@ -35,8 +35,6 @@
     generateCodeChallenge(codeVerifier).then((code_challenge) => {
       window.localStorage.setItem('code_verifier', codeVerifier);
 
-      const scope = 'user-read-private user-read-email';
-
       // Redirect to example:
       // GET https://accounts.spotify.com/authorize?response_type=code&client_id=77e602fc63fa4b96acff255ed33428d3&redirect_uri=http%3A%2F%2Flocalhost&scope=user-follow-modify&state=e21392da45dbf4&code_challenge=KADwyz1X~HIdcAG20lnXitK6k51xBP4pEMEZHmCneHD1JhrcHjE1P3yU_NjhBz4TdhV6acGo16PCd10xLwMJJ4uCutQZHw&code_challenge_method=S256
 
@@ -45,7 +43,7 @@
         {
           response_type: 'code',
           client_id,
-          scope,
+          scope: 'user-read-private user-read-email',
           code_challenge_method: 'S256',
           code_challenge,
           redirect_uri,
@@ -60,30 +58,20 @@
   function exchangeToken(code) {
     const code_verifier = localStorage.getItem('code_verifier');
 
-    const url = generateUrlWithSearchParams(
-      'https://accounts.spotify.com/api/token',
-      {
+    fetch('https://accounts.spotify.com/api/token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+      },
+      body: new URLSearchParams({
         client_id,
         grant_type: 'authorization_code',
         code,
         redirect_uri,
         code_verifier,
-      },
-    );
-
-    fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-      },
+      }),
     })
-      .then(async (response) => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw { response, error: await response.json() };
-        }
-      })
+      .then(addThrowErrorToFetch)
       .then((data) => {
         processTokenResponse(data);
 
@@ -94,31 +82,19 @@
   }
 
   function refreshToken() {
-    const url = generateUrlWithSearchParams(
-      'https://accounts.spotify.com/api/token',
-      {
-        client_id,
-        grant_type: 'refresh_token',
-        refresh_token,
-      },
-    );
-
-    fetch(url, {
+    fetch('https://accounts.spotify.com/api/token', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
       },
+      body: new URLSearchParams({
+        client_id,
+        grant_type: 'refresh_token',
+        refresh_token,
+      }),
     })
-      .then(async (response) => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw { response, error: await response.json() };
-        }
-      })
-      .then((data) => {
-        processTokenResponse(data);
-      })
+      .then(addThrowErrorToFetch)
+      .then(processTokenResponse)
       .catch(handleError);
   }
 
@@ -128,6 +104,14 @@
       status: error.response.status,
       message: error.error.error_description,
     });
+  }
+
+  async function addThrowErrorToFetch(response) {
+    if (response.ok) {
+      return response.json();
+    } else {
+      throw { response, error: await response.json() };
+    }
   }
 
   function logout() {

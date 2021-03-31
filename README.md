@@ -16,7 +16,7 @@ To locally host this example `http-server` is used.
 
 First install the dependecies by running `npm install`.
 
-Then serve the files in the `public` folder via `npm run`
+Then serve the files in the `public` folder via `npm start`
 
 ### Thanks to
 https://github.com/curityio/pkce-javascript-example
